@@ -1,0 +1,101 @@
+app: server-node
+service: server-node
+frameworkVersion: '3'
+useDotenv: true
+provider:
+  apiGateway:
+    shouldStartNameWithService: true
+  lambdaHashingVersion: 20201221
+  name: aws
+  timeout: 30 # optional, in seconds, default is 6
+  memorySize: 1024 # optional, in MB, default is 1024
+  runtime: nodejs16.x
+  stage: ${opt:stage, 'local'}
+  region: ${opt:region, 'ap-southeast-1'}
+  websocketsApiName: websocket-qm-${self:provider.stage}
+  websocketsApiRouteSelectionExpression: $request.body.action
+  versionFunctions: false
+  logs:
+    websocket: true
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 'execute-api:ManageConnections'
+      Resource:
+        - 'arn:aws:execute-api:*:*:**/@connections/*'
+
+    - Effect: Allow
+      Action:
+        - 'ses:SendEmail'
+        - 'ses:SendRawEmail'
+        - 'states:StartExecution'
+      Resource: '*'
+
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+      Resource: '*'
+
+  environment:
+    APP_NAME: ${env:APP_NAME}
+
+    MYSQLDATABASE: ${env:MYSQLDATABASE}
+    MYSQLHOST: ${env:MYSQLHOST}
+    MYSQLPORT: ${env:MYSQLPORT}
+    MYSQLUSER: ${env:MYSQLUSER}
+    MYSQLPASSWORD: ${env:MYSQLPASSWORD}
+
+    STAGE: ${env:STAGE}
+  
+    AWS_ACCESS_ID: ${env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_KEY_VALUE: ${env:AWS_SECRET_ACCESS_KEY}
+    AWS_REGION_DEFAULT: ${env:AWS_DEFAULT_REGION}
+
+
+plugins:
+  - serverless-webpack
+  - serverless-prune-plugin
+  - serverless-plugin-split-stacks
+  # - serverless-plugin-warmup
+  - serverless-offline # serverless-offline needs to be last in the list
+
+custom:
+  #Test1
+  cors:
+    origins: '*'
+    headers: 
+      - Content-Type
+      - X-Amz-Date
+      - Authorization
+      - X-Api-Key
+      - X-Amz-Security-Token
+      - X-Amz-User-Agent
+      - X-Amzn-Trace-Id
+      - Access-Control-Allow-Headers
+      - Access-Control-Allow-Origin
+      - Access-Control-Allow-Methods
+    allowCredentials: true
+
+  webpack:
+    includeModules: true
+
+
+  # https://github.com/dougmoscrop/serverless-plugin-split-stacks
+  splitStacks:
+    perType: false
+    perFunction: true
+
+  # https://github.com/typeorm/typeorm/issues/3427#issuecomment-622378803
+  serverless-offline:
+    allowCache: true
+    useChildProcesses: true
+    httpPort: 12000
+
+package:
+  exclude:
+    - node_modules/**
+
+functions:
+  - ${file(./handlers/middleware/serverless.yml)}
+  - ${file(./handlers/transaction/serverless.yml)}
+  - ${file(./handlers/users/serverless.yml)}

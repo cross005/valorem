@@ -1,0 +1,28 @@
+{
+    "extends": "./tsconfig.paths.json",
+    "compilerOptions": {
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "lib": ["es2019", "es2020.bigint", "es2020.string", "es2020.symbol.wellknown"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "noImplicitReturns": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "outDir": ".build",
+        "removeComments": true,
+        "resolveJsonModule": true,
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "target": "es2019",
+        "watch": true,
+        "esModuleInterop": true,
+        "types": ["node", "reflect-metadata", "jest"],
+        "typeRoots": ["node_modules/@types"]
+    },
+    "include": ["**/*"],
+    "exclude": [".git", ".dynamodb", ".serverless", ".vscode", ".webpack", "coverage", "node_modules", "**/node_modules/*", ".build"]
+}

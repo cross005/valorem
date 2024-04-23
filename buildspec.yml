@@ -1,0 +1,20 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - npm install -g serverless@3.38.0 && npm install --production --omit=dev
+  pre_build:
+    commands:
+      - npm install
+      - PARAM_KEY="${STAGE}_server-node"
+      - DEST_FILENAME="herpderp.${STAGE}"
+      # - aws ssm get-parameter --name $PARAM_KEY --region ap-southeast-1 --output text --query Parameter.Value > $DEST_FILENAME
+      - export $(grep -v '^#' $DEST_FILENAME | xargs -d '\n')
+  build:
+    commands:
+      - serverless deploy --stage ${STAGE} --region ap-southeast-1 --config serverless.yml
+  post_build:
+    commands:
+      - yarn orm migration:run

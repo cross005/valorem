@@ -1,0 +1,7 @@
+CustomersTransaction:
+  handler: handlers/transaction/handler.handleCustomersTransactionData
+  events:
+    - http:
+        path: webhook/payment
+        method: post
+        cors: true

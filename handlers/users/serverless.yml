@@ -1,0 +1,19 @@
+User:
+  handler: handlers/users/handler.handleUserData
+  events:
+    - http:
+        path: user/{user_id}/wallet
+        method: get
+        cors: true
+        request:
+          parameters:
+            paths:
+              user_id: true
+    - http:
+        path: user/{user_id}/transactions
+        method: get
+        cors: true
+        request:
+          parameters:
+            paths:
+              user_id: true

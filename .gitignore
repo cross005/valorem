@@ -1,0 +1,7 @@
+.build
+.dynamodb
+.serverless
+.webpack
+.vscode
+node_modules
+.env.local

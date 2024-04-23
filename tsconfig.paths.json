@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "@config/*": ["config/*"],
+            "@services/*": ["services/*"],
+            "@ioc/*": ["ioc/*"],
+            "@common/*": ["common/*"],
+            "@models/*": ["common/models/*"],
+            "@utils/*": ["utils/*"],
+
+            "@db/*": ["db/*"],
+            "@dynamodb/*": ["dynamodb/*"],
+            "@websocket": ["services/websocket"],
+
+            "@sharedDto/*": ["../shared/models/*"],
+            "@sharedTypes/*": ["../shared/types/*"],
+            "@sharedServices/*": ["../shared/services/*"]
+        }
+    }
+}

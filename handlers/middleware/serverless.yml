@@ -1,0 +1,2 @@
+AuthorizerWebhook:
+    handler: handlers/middleware/handler.webhookAuth
